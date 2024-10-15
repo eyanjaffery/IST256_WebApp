@@ -50,13 +50,19 @@ Members:
     <form id="shopperForm" class="needs-validation" novalidate>
         <div class="row">
             <!-- Customer Name -->
-            <div class="col-md-6 mb-3">
+            <div class="col-md-4 mb-3">
                 <label for="customerName" class="form-label">Full Name</label>
                 <input type="text" class="form-control" id="customerName" placeholder="John Doe" required>
                 <div class="invalid-feedback">Please enter a valid name.</div>
             </div>
+            <! -- Age -->
+            <div class="col-md-4 mb-3">
+                <label for="customerAge" class="form-label">Shopper Age</label>
+                <input type="number" class="form-control" id="customerAge" placeholder="18" required>
+                <div class="invalid-feedback">Please enter a valid age.</div>
+            </div>
             <!-- Email -->
-            <div class="col-md-6 mb-3">
+            <div class="col-md-4 mb-3">
                 <label for="customerEmail" class="form-label">Email Address</label>
                 <input type="email" class="form-control" id="customerEmail" placeholder="john@example.com" required>
                 <div class="invalid-feedback">Please enter a valid email.</div>
@@ -160,6 +166,7 @@ Members:
         let form = event.target;
         let data = {
             name: form.elements['customerName'].value,
+            age: form.elements['customerAge'].value,
             email: form.elements['customerEmail'].value,
             password: form.elements['password'].value,
             address: form.elements['customerAddress'].value,
