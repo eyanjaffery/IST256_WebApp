@@ -55,95 +55,79 @@ Members:
 <!-- Shopper Management Form -->
 <div class="container mt-5 mb-5">
     <h1 class="text-center mb-4" id="scrollUp" >SIGN UP FOR EXCITING DEALS!!!!!!</h1>
-    <form id="shopperForm" class="needs-validation" novalidate>
+    <form id="shopperForm" onsubmit="validateForm(event)">
         <div class="row">
             <!-- Customer Name -->
             <div class="col-md-4 mb-3">
                 <label for="customerName" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="customerName" placeholder="John Doe" required>
-                <div class="invalid-feedback">Please enter a valid name.</div>
+                <input type="text" class="form-control" id="customerName" placeholder="John Doe">
+                <span id="customerName-error" style="color:red;"></span>
             </div>
-            <! -- Age -->
+            <!-- Age -->
             <div class="col-md-4 mb-3">
                 <label for="customerAge" class="form-label">Shopper Age</label>
-                <input type="number" class="form-control" id="customerAge" placeholder="18" required>
-                <div class="invalid-feedback">Please enter a valid age.</div>
+                <input type="number" class="form-control" id="customerAge" placeholder="18">
+                <span id="customerAge-error" style="color:red;"></span>
             </div>
+
             <!-- Email -->
             <div class="col-md-4 mb-3">
                 <label for="customerEmail" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="customerEmail" placeholder="john@example.com" required>
-                <div class="invalid-feedback">Please enter a valid email.</div>
+                <input type="text" class="form-control" id="customerEmail" placeholder="john@example.com">
+                <span id="customerEmail-error" style="color:red;"></span>
             </div>
+
         </div>
         <div class="row">
             <!-- Password -->
             <div class="col-md-6 mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" required>
-                <div class="invalid-feedback">Please enter a valid password.</div>
+                <input type="password" class="form-control" id="password">
+                <span id="password-error" style="color:red;"></span>
             </div>
             <!-- Confirm Password -->
             <div class="col-md-6 mb-3">
                 <label for="confirmPassword" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="confirmPassword" required>
-                <div class="invalid-feedback">Please confirm your password.</div>
+                <input type="password" class="form-control" id="confirmPassword">
+                <span id="confirmPassword-error" style="color:red;"></span>
             </div>
         </div>
         <div class="row">
-            <!-- Address -->
+            <!-- Customer Address -->
             <div class="col-md-6 mb-3">
                 <label for="customerAddress" class="form-label">Address</label>
-                <input type="text" class="form-control" id="customerAddress" placeholder="1234 Main St" required>
-                <div class="invalid-feedback">Please enter your shipping address.</div>
+                <input type="text" class="form-control" id="customerAddress" placeholder="1234 Main St">
+                <span id="customerAddress-error" style="color:red;"></span>
             </div>
-            <!-- City -->
+
+            <!-- Customer City -->
             <div class="col-md-6 mb-3">
                 <label for="customerCity" class="form-label">City</label>
-                <input type="text" class="form-control" id="customerCity" placeholder="City" required>
-                <div class="invalid-feedback">Please enter your city.</div>
+                <input type="text" class="form-control" id="customerCity" placeholder="City">
+                <span id="customerCity-error" style="color:red;"></span>
             </div>
         </div>
 
         <div class="row">
-            <!-- State -->
+            <!-- Customer State -->
             <div class="col-md-4 mb-3">
                 <label for="customerState" class="form-label">State</label>
-                <input type="text" class="form-control" id="customerState" placeholder="State" required>
-                <div class="invalid-feedback">Please enter your state.</div>
+                <input type="text" class="form-control" id="customerState" placeholder="State">
+                <span id="customerState-error" style="color:red;"></span>
             </div>
-            <!-- ZIP Code -->
+
+            <!-- Customer ZIP -->
             <div class="col-md-4 mb-3">
                 <label for="customerZip" class="form-label">ZIP Code</label>
-                <input type="text" class="form-control" id="customerZip" placeholder="ZIP" required>
-                <div class="invalid-feedback">Please enter a valid ZIP code.</div>
+                <input type="text" class="form-control" id="customerZip" placeholder="ZIP">
+                <span id="customerZip-error" style="color:red;"></span>
             </div>
-            <!-- Country -->
+
+            <!-- Customer Country -->
             <div class="col-md-4 mb-3">
                 <label for="customerCountry" class="form-label">Country</label>
-                <input type="text" class="form-control" id="customerCountry" placeholder="Country" required>
-                <div class="invalid-feedback">Please enter your country.</div>
-            </div>
-        </div>
-
-        <!-- Payment Method -->
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="paymentMethod" class="form-label">Payment Method</label>
-                <select class="form-select" id="paymentMethod" required>
-                    <option value="" disabled selected>Select payment method</option>
-                    <option value="credit">Credit Card</option>
-                    <option value="debit">Debit Card</option>
-                    <option value="paypal">PayPal</option>
-                </select>
-                <div class="invalid-feedback">Please select a payment method.</div>
-            </div>
-
-            <!-- Card Details (only show if Credit/Debit is selected) -->
-            <div class="col-md-6 mb-3" id="cardDetails" style="display: none;">
-                <label for="cardNumber" class="form-label">Card Number</label>
-                <input type="text" class="form-control" id="cardNumber" placeholder="xxxx-xxxx-xxxx-xxxx">
-                <div class="invalid-feedback">Please enter a valid card number.</div>
+                <input type="text" class="form-control" id="customerCountry" placeholder="Country">
+                <span id="customerCountry-error" style="color:red;"></span>
             </div>
         </div>
 
