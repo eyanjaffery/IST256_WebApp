@@ -10824,3 +10824,12 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+
+/** Validation Styles **/
+.valid-input {
+  border-color: green;
+}
+
+.invalid-input {
+  border-color: red;
+}
