@@ -14,160 +14,131 @@ $(document).ready(function() {
             scrollTop: $('#scrollUp').offset().top
         }, 200);  // Scroll duration in milliseconds
     }
-
-    // Attach real-time validation to each input field
-    $('#customerName, #customerAge, #customerEmail, #password, #confirmPassword, #customerAddress, #customerCity, #customerState, #customerZip, #customerCountry').on('input', validateForm);
+    $('#shopperForm').on('input', validateForm);
+    document.getElementById('shopperForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (isValid) {
+            console.log(JSON.stringify(shopper));
+            // Clear form after submission
+            $('#shopperForm').trigger('reset');
+            $('input').removeClass('valid-input');
+        }
+    });
 });
 
-function validateForm(event) {
+let isValid = true;
+let shopper = {};
 
-    let isValid = true;
-
-    // Collect form values
-    const customerName = $('#customerName').val().trim();
-    const customerAge = $('#customerAge').val();
-    const customerEmail = $('#customerEmail').val().trim();
-    const password = $('#password').val();
-    const confirmPassword = $('#confirmPassword').val();
-    const customerAddress = $('#customerAddress').val().trim();
-    const customerCity = $('#customerCity').val().trim();
-    const customerState = $('#customerState').val().trim();
-    const customerZip = $('#customerZip').val().trim();
-    const customerCountry = $('#customerCountry').val().trim();
-
-    // Error elements
-    const customerNameError = $('#customerName-error');
-    const customerAgeError = $('#customerAge-error');
-    const customerEmailError = $('#customerEmail-error');
-    const passwordError = $('#password-error');
-    const confirmPasswordError = $('#confirmPassword-error');
-    const customerAddressError = $('#customerAddress-error');
-    const customerCityError = $('#customerCity-error');
-    const customerStateError = $('#customerState-error');
-    const customerZipError = $('#customerZip-error');
-    const customerCountryError = $('#customerCountry-error');
-
-    // Input elements
-    const customerNameInput = $('#customerName');
-    const customerAgeInput = $('#customerAge');
-    const customerEmailInput = $('#customerEmail');
-    const passwordInput = $('#password');
-    const confirmPasswordInput = $('#confirmPassword');
-    const customerAddressInput = $('#customerAddress');
-    const customerCityInput = $('#customerCity');
-    const customerStateInput = $('#customerState');
-    const customerZipInput = $('#customerZip');
-    const customerCountryInput = $('#customerCountry');
+function validateForm() {
+    isValid = true;
+    shopper = {
+        "NAME": $('#customerName').val().trim(),
+        "AGE": $('#customerAge').val(),
+        "EMAIL": $('#customerEmail').val().trim(),
+        "PASSWORD": $('#password').val(),
+        "confirmPassword": $('#confirmPassword').val(),
+        "ADDRESS": $('#customerAddress').val().trim(),
+        "CITY": $('#customerCity').val().trim(),
+        "STATE": $('#customerState').val().trim(),
+        "ZIP": $('#customerZip').val().trim(),
+        "COUNTRY": $('#customerCountry').val().trim()
+    };
 
     // Reset all error messages
-    customerNameError.text('');
-    customerAgeError.text('');
-    customerEmailError.text('');
-    passwordError.text('');
-    confirmPasswordError.text('');
-    customerAddressError.text('');
-    customerCityError.text('');
-    customerStateError.text('');
-    customerZipError.text('');
-    customerCountryError.text('');
+    $('.error').text('');
+
 
     // Resets validation styles
     $('input').removeClass('invalid-input valid-input');
 
-    // Validate customer name
-    if (customerName === "") {
-        customerNameError.text('Please enter your full name.');
-        customerNameInput.addClass('invalid-input');
+    // Validate customer NAME
+    if (shopper.NAME === "") {
+        $('#customerName-error').text('Please enter your full NAME.');
+        $('#customerName').addClass('invalid-input');
         isValid = false;
     } else {
-        customerNameInput.addClass('valid-input');
+        $('#customerName').addClass('valid-input');
     }
 
-    // Validate age (must be 18+)
-    if (customerAge === "" || isNaN(customerAge) || parseInt(customerAge) < 18) {
-        customerAgeError.text('You must be 18 years or older.');
-        customerAgeInput.addClass('invalid-input');
+    // Validate customer AGE
+    if(shopper.AGE === "" || isNaN(shopper.AGE) || shopper.AGE < 18) {
+        $('#customerAge-error').text('Please enter a valid AGE.');
+        $('#customerAge').addClass('invalid-input');
         isValid = false;
     } else {
-        customerAgeInput.addClass('valid-input');
+        $('#customerAge').addClass('valid-input');
     }
 
     // Basic email regex validation
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (customerEmail === "" || !emailPattern.test(customerEmail)) {
-        customerEmailError.text('Please enter a valid email address.');
-        customerEmailInput.addClass('invalid-input');
+    if (shopper.EMAIL === "" || !emailPattern.test(shopper.EMAIL)) {
+        $('#customerEmail-error').text('Please enter a valid email address.');
+        $('#customerEmail').addClass('invalid-input');
         isValid = false;
     } else {
-        customerEmailInput.addClass('valid-input');
+        $('#customerEmail').addClass('valid-input');
     }
 
     // Validate password
-    if (password === "") {
-        passwordError.text('Please enter a password.');
-        passwordInput.addClass('invalid-input');
+    if (shopper.PASSWORD === "") {
+        $('#password-error').text('Please enter a password.');
+        $('#password').addClass('invalid-input');
         isValid = false;
     } else {
-        passwordInput.addClass('valid-input');
+        $('#password').addClass('valid-input');
     }
 
     // Validate confirm password
-    if (confirmPassword === "" || confirmPassword !== password) {
-        confirmPasswordError.text('Passwords do not match.');
-        confirmPasswordInput.addClass('invalid-input');
+    if (shopper.confirmPassword === "" || shopper.confirmPassword !== shopper.PASSWORD) {
+        $('#confirmPassword-error').text('Passwords do not match.');
+        $('#confirmPassword').addClass('invalid-input');
         isValid = false;
     } else {
-        confirmPasswordInput.addClass('valid-input');
+        $('#confirmPassword').addClass('valid-input');
     }
 
     // Validate address
-    if (customerAddress === "") {
-        customerAddressError.text('Please enter your address.');
-        customerAddressInput.addClass('invalid-input');
+    if (shopper.ADDRESS === "") {
+        $('#customerAddress-error').text('Please enter your address.');
+        $('#customerAddress').addClass('invalid-input');
         isValid = false;
     } else {
-        customerAddressInput.addClass('valid-input');
+        $('#customerAddress').addClass('valid-input');
     }
 
     // Validate city
-    if (customerCity === "") {
-        customerCityError.text('Please enter your city.');
-        customerCityInput.addClass('invalid-input');
+    if (shopper.CITY === "") {
+        $('#customerCity-error').text('Please enter your city.');
+        $('#customerCity').addClass('invalid-input');
         isValid = false;
     } else {
-        customerCityInput.addClass('valid-input');
+        $('#customerCity').addClass('valid-input');
     }
 
     // Validate state
-    if (customerState === "") {
-        customerStateError.text('Please enter your state.');
-        customerStateInput.addClass('invalid-input');
+    if (shopper.STATE === "") {
+        $('#customerState-error').text('Please enter your state.');
+        $('#customerState').addClass('invalid-input');
         isValid = false;
     } else {
-        customerStateInput.addClass('valid-input');
+        $('#customerState').addClass('valid-input');
     }
 
     // Validate ZIP code
-    if (customerZip === "" || isNaN(customerZip)) {
-        customerZipError.text('Please enter a valid ZIP code.');
-        customerZipInput.addClass('invalid-input');
+    if (shopper.ZIP === "" || isNaN(shopper.ZIP)) {
+        $('#customerZip-error').text('Please enter a valid ZIP code.');
+        $('#customerZip').addClass('invalid-input');
         isValid = false;
     } else {
-        customerZipInput.addClass('valid-input');
+        $('#customerZip').addClass('valid-input');
     }
 
     // Validate country
-    if (customerCountry === "") {
-        customerCountryError.text('Please enter your country.');
-        customerCountryInput.addClass('invalid-input');
+    if (shopper.COUNTRY === "") {
+        $('#customerCountry-error').text('Please enter your country.');
+        $('#customerCountry').addClass('invalid-input');
         isValid = false;
     } else {
-        customerCountryInput.addClass('valid-input');
-    }
-
-    // Prevents form submission
-    if (event.type === "submit" && !isValid) {
-        event.preventDefault();
-        console.log("Validation failed. Form not submitted.");
+        $('#customerCountry').addClass('valid-input');
     }
 }

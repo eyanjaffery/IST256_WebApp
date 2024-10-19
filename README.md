@@ -14,7 +14,7 @@ This project is focused on building a functional and responsive web application 
 
 	•	Homepage (index.html): A sleek and intuitive homepage that showcases various products in a card layout. Users can view product details and add items to their cart.
 	•	Login (login.html): A login page for registered users to access their accounts.
-	•	Shopper Management (ShopperManagement.html): A form that collects and manages customer information including their name, address, and payment details. It includes real-time validation and a responsive layout.
+	•	Shopper Management (ShopperManagement.html): A form that collects and manages customer information including their NAME, address, and payment details. It includes real-time validation and a responsive layout.
 
 # Features:
 
