@@ -59,7 +59,7 @@ function validateForm(event) {
     const customerZipInput = $('#customerZip');
     const customerCountryInput = $('#customerCountry');
 
-    // Reset all error messages and input field classes
+    // Reset all error messages
     customerNameError.text('');
     customerAgeError.text('');
     customerEmailError.text('');
@@ -71,7 +71,8 @@ function validateForm(event) {
     customerZipError.text('');
     customerCountryError.text('');
 
-    $('input').removeClass('invalid-input valid-input'); // Remove both classes from all inputs
+    // Resets validation styles
+    $('input').removeClass('invalid-input valid-input');
 
     // Validate customer name
     if (customerName === "") {
@@ -146,7 +147,7 @@ function validateForm(event) {
         customerStateInput.addClass('valid-input');
     }
 
-    // Validate ZIP code (ensure it's a number)
+    // Validate ZIP code
     if (customerZip === "" || isNaN(customerZip)) {
         customerZipError.text('Please enter a valid ZIP code.');
         customerZipInput.addClass('invalid-input');
@@ -164,9 +165,9 @@ function validateForm(event) {
         customerCountryInput.addClass('valid-input');
     }
 
-    // If real-time validation, we don't need to prevent form submission yet
+    // Prevents form submission
     if (event.type === "submit" && !isValid) {
-        event.preventDefault();  // Prevent submission if any field is invalid
+        event.preventDefault();
         console.log("Validation failed. Form not submitted.");
     }
 }
