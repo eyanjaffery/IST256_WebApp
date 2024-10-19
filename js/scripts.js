@@ -3,9 +3,15 @@
 * Copyright 2013-2023 Start Bootstrap
 * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-shop-homepage/blob/master/LICENSE)
 */
-// This file is intentionally blank
-// Use this file to add JavaScript to your project
-// scripts.js
+/*
+  IST 256 - Web Application Group Project
+  Group: 7
+  Members:
+  - Eyan Jaffery
+  - Michael Litka
+  - Jeffery Gaskin
+*/
+
 
 $(document).ready(function() {
     // Check if the "scrollUpForm" exists and scroll to it when page loads
