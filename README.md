@@ -1,6 +1,6 @@
-# **E-COMMERCE WEB APPLICATON**
+# **The Bookshelf WEB APPLICATON**
 
-This repository contains the source code for the E-Commerce Website, a simple and responsive online shopping application built using HTML, CSS, and Bootstrap. The project is designed to provide an easy-to-use storefront, shopper management, and user authentication interface for both administrators and shoppers.
+This repository contains the source code for the The Bookshelf E-Commerce Website, a simple and responsive online shopping application built using HTML, CSS, Bootstrap, JS and jQuery. The project is designed to provide an easy-to-use storefront, shopper management, and user authentication interface for both administrators and shoppers.
 
 ## Team Members:
 
@@ -30,6 +30,7 @@ This project is focused on building a functional and responsive web application 
 	•	CSS3: For styling the web pages.
 	•	Bootstrap 5: For a responsive and mobile-friendly design.
 	•	JavaScript: For client-side validation and form management.
+ 	•	jQuery: For efficent Form Handling.
 
 # Folder Structure:
 
@@ -45,7 +46,6 @@ This project is focused on building a functional and responsive web application 
 	1.	Clone the repository:
 
 git clone https://github.com/yourusername/your-repo-name.git
-
 
 	2.	Open the index.html file in your browser to view the homepage.
 
