@@ -30,6 +30,7 @@ $(document).ready(function() {
 
         if (validateForm()) {
             console.log(JSON.stringify(collectFormData()));  // Log the form data if valid
+            alert(JSON.stringify(collectFormData()));  // Alert the form data if valid
             // Clear form after submission
             $('#shopperForm').trigger('reset');
             $('input').removeClass('valid-input');
