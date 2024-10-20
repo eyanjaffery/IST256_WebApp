@@ -11,19 +11,25 @@
   - Michael Litka
   - Jeffery Gaskin
 */
-
 $(document).ready(function() {
     // Check if the "scrollUpForm" exists and scroll to it when page loads
-    if ($('#scrollUp').length) {
+    let scrollUp = $('scrollUp');
+    let shopperForm = $('#shopperForm');
+    if (scrollUp.length) {
         $('html, body').animate({
-            scrollTop: $('#scrollUp').offset().top
+            scrollTop: scrollUp.offset().top
         }, 200);  // Scroll duration in milliseconds
     }
-    $('#shopperForm').on('input', validateForm);
-    document.getElementById('shopperForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        if (isValid) {
-            console.log(JSON.stringify(shopper));
+
+    // Attach real-time validation to the form inputs
+    shopperForm.on('input', validateForm);
+
+    // Attach the submit event using jQuery
+    shopperForm.on('submit', function (event) {
+        event.preventDefault(); // Prevent the form from submitting
+
+        if (validateForm()) {
+            console.log(JSON.stringify(collectFormData()));  // Log the form data if valid
             // Clear form after submission
             $('#shopperForm').trigger('reset');
             $('input').removeClass('valid-input');
@@ -31,43 +37,32 @@ $(document).ready(function() {
     });
 });
 
-let isValid = true;
-let shopper = {};
-
+// Function to validate the form
 function validateForm() {
-    isValid = true;
-    shopper = {
-        "NAME": $('#customerName').val().trim(),
-        "AGE": $('#customerAge').val(),
-        "EMAIL": $('#customerEmail').val().trim(),
-        "PASSWORD": $('#password').val(),
-        "confirmPassword": $('#confirmPassword').val(),
-        "ADDRESS": $('#customerAddress').val().trim(),
-        "CITY": $('#customerCity').val().trim(),
-        "STATE": $('#customerState').val().trim(),
-        "ZIP": $('#customerZip').val().trim(),
-        "COUNTRY": $('#customerCountry').val().trim()
-    };
+    let isValid = true;
+
+    // Collect form values into an object (excluding confirmPassword)
+    let shopper = collectFormData();
+    let confirmPassword = $('#confirmPassword').val();  // Only used for verification
 
     // Reset all error messages
     $('.error').text('');
 
-
     // Resets validation styles
     $('input').removeClass('invalid-input valid-input');
 
-    // Validate customer NAME
+    // Validate customer name
     if (shopper.NAME === "") {
-        $('#customerName-error').text('Please enter your full NAME.');
+        $('#customerName-error').text('Please enter your full name.');
         $('#customerName').addClass('invalid-input');
         isValid = false;
     } else {
         $('#customerName').addClass('valid-input');
     }
 
-    // Validate customer AGE
-    if(shopper.AGE === "" || isNaN(shopper.AGE) || shopper.AGE < 18) {
-        $('#customerAge-error').text('Please enter a valid AGE.');
+    // Validate customer age
+    if (shopper.AGE === "" || isNaN(shopper.AGE) || shopper.AGE < 18) {
+        $('#customerAge-error').text('Please enter a valid age.');
         $('#customerAge').addClass('invalid-input');
         isValid = false;
     } else {
@@ -85,17 +80,17 @@ function validateForm() {
     }
 
     // Validate password
-    passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+    const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
     if (shopper.PASSWORD === "" || !passwordPattern.test(shopper.PASSWORD)) {
-        $('#password-error').text('Password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter.');
+        $('#password-error').text('Password must be between 6 to 20 characters and contain at least one numeric digit, one uppercase, and one lowercase letter.');
         $('#password').addClass('invalid-input');
         isValid = false;
     } else {
         $('#password').addClass('valid-input');
     }
 
-    // Validate confirm password
-    if (shopper.confirmPassword === "" || shopper.confirmPassword !== shopper.PASSWORD) {
+    // Validate confirm password (but do not store it)
+    if (confirmPassword === "" || confirmPassword !== shopper.PASSWORD) {
         $('#confirmPassword-error').text('Passwords do not match.');
         $('#confirmPassword').addClass('invalid-input');
         isValid = false;
@@ -147,4 +142,21 @@ function validateForm() {
     } else {
         $('#customerCountry').addClass('valid-input');
     }
+
+    return isValid;  // Return true if the form is valid, false otherwise
+}
+
+// Function to collect form data into an object (excluding confirmPassword)
+function collectFormData() {
+    return {
+        "NAME": $('#customerName').val().trim(),
+        "AGE": $('#customerAge').val().trim(),
+        "EMAIL": $('#customerEmail').val().trim(),
+        "PASSWORD": $('#password').val(),
+        "ADDRESS": $('#customerAddress').val().trim(),
+        "CITY": $('#customerCity').val().trim(),
+        "STATE": $('#customerState').val().trim(),
+        "ZIP": $('#customerZip').val().trim(),
+        "COUNTRY": $('#customerCountry').val().trim()
+    };
 }
