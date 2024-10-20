@@ -13,7 +13,7 @@
 */
 $(document).ready(function() {
     // Check if the "scrollUpForm" exists and scroll to it when page loads
-    let scrollUp = $('scrollUp');
+    let scrollUp = $('#scrollUp');
     let shopperForm = $('#shopperForm');
     if (scrollUp.length) {
         $('html, body').animate({
@@ -33,6 +33,8 @@ $(document).ready(function() {
             // Clear form after submission
             $('#shopperForm').trigger('reset');
             $('input').removeClass('valid-input');
+        } else {
+            console.log("Form invalid. PLEASE FIX ERRORS BEFORE SUBMITTING.");
         }
     });
 });
@@ -89,12 +91,17 @@ function validateForm() {
         $('#password').addClass('valid-input');
     }
 
-    // Validate confirm password (but do not store it)
-    if (confirmPassword === "" || confirmPassword !== shopper.PASSWORD) {
+    // Validate confirm password
+    if (confirmPassword === "") {
+        $('#confirmPassword-error').text('Please confirm your password.');
+        $('#confirmPassword').addClass('invalid-input');
+        isValid = false;
+    } else if (shopper.PASSWORD !== confirmPassword) {
         $('#confirmPassword-error').text('Passwords do not match.');
         $('#confirmPassword').addClass('invalid-input');
         isValid = false;
-    } else {
+    }
+    else {
         $('#confirmPassword').addClass('valid-input');
     }
 
