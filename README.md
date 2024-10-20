@@ -1,4 +1,4 @@
-# **The Bookshelp WEB APPLICATON**
+# **The Bookshelf WEB APPLICATON**
 
 This repository contains the source code for the The Bookshelf E-Commerce Website, a simple and responsive online shopping application built using HTML, CSS, Bootstrap, JS and jQuery. The project is designed to provide an easy-to-use storefront, shopper management, and user authentication interface for both administrators and shoppers.
 
