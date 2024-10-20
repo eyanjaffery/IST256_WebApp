@@ -12,7 +12,6 @@
   - Jeffery Gaskin
 */
 
-
 $(document).ready(function() {
     // Check if the "scrollUpForm" exists and scroll to it when page loads
     if ($('#scrollUp').length) {
@@ -86,8 +85,9 @@ function validateForm() {
     }
 
     // Validate password
-    if (shopper.PASSWORD === "") {
-        $('#password-error').text('Please enter a password.');
+    passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+    if (shopper.PASSWORD === "" || !passwordPattern.test(shopper.PASSWORD)) {
+        $('#password-error').text('Password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter.');
         $('#password').addClass('invalid-input');
         isValid = false;
     } else {
