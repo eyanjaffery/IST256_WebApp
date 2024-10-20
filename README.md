@@ -4,9 +4,9 @@ This repository contains the source code for the The Bookshelf E-Commerce Websit
 
 ## Team Members:
 
-	•	Eyan Jaffery (Project Manager - Lead Developer)
-	•	Michael Litka (Front-End Back-End Developer)
-	•	Jefferey Gaskin (Back-End Back-End Developer)
+	•	Eyan Jaffery (Lead Developer)
+	•	Michael Litka (Front-End Developer)
+	•	Jefferey Gaskin (Back-End Developer)
 
 ## Project Overview:
 
