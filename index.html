@@ -32,13 +32,13 @@ Members:
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="#booksListing">Browse Books</a></li>
-                <li class="nav-item"><a class="nav-link" id="joinLink" href="ShopperManagement.html">Join The Bookshelf</a></li>
+                <li class="nav-item"><a class="nav-link" id="joinLink" href="shopperManagement.html">Join The Bookshelf</a></li>
             </ul>
             <form class="d-flex">
-                <button class="btn btn-outline-dark" type="submit">
+                <button id="cartButton" class="btn btn-outline-dark">
                     <i class="bi-cart-fill me-1"></i>
                     Cart
-                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    <span class="badge bg-dark text-white ms-1 rounded-pill" id="total-items-cart">0</span>
                 </button>
             </form>
         </div>
@@ -165,7 +165,10 @@ Members:
 </footer>
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <!-- Core theme JS-->
-<script src="js/scripts.js" defer></script>
+<script src="js/shopperManagement.js" defer></script>
+<script src="js/scripts.js"></script>
 </body>
 </html>
