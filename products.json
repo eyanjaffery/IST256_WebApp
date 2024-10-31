@@ -3,7 +3,7 @@
     "id": 1,
     "name": "The Great Gatsby",
     "author": "F. Scott Fitzgerald",
-    "price": 44.00,
+    "price": 34.99,
     "currency": "$",
     "image": "assets/theGreatGatsby.png",
     "description": "A classic novel set in the Roaring Twenties, exploring themes of wealth, love, and the American Dream."
@@ -12,7 +12,7 @@
     "id": 2,
     "name": "1984",
     "author": "George Orwell",
-    "price": 44.00,
+    "price": 34.99,
     "currency": "$",
     "image": "assets/1984.png",
     "description": "A dystopian novel set in a totalitarian society controlled by the Party and its leader, Big Brother."
@@ -21,7 +21,7 @@
     "id": 3,
     "name": "Pride and Prejudice",
     "author": "Jane Austen",
-    "price": 44.00,
+    "price": 44.99,
     "currency": "$",
     "image": "assets/pride&prejudice.png",
     "description": "A romantic novel that delves into themes of love, class, and family through the story of Elizabeth Bennet and Mr. Darcy."
@@ -30,7 +30,7 @@
     "id": 4,
     "name": "To Kill a Mockingbird",
     "author": "Harper Lee",
-    "price": 44.00,
+    "price": 29.99,
     "currency": "$",
     "image": "assets/toKillAMockingBird.png",
     "description": "A powerful narrative that addresses serious issues like racial injustice and moral growth through the eyes of young Scout Finch."

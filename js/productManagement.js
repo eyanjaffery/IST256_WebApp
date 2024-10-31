@@ -54,80 +54,80 @@ $(document).ready(function () {
     } catch (error) {
         console.error('Error fetching products:', error);
     }
+});
 
-    // Initialize an empty cart
-    let cart = [];
+// Initialize an empty cart
+let cart = [];
 
-    // Function to add item to the cart
-    function addToCart(product) {
-        if (!product) {
-            console.error('Product not found:', product);
-            return;
-        }
-
-        // Check if the product already exists in the cart
-        const existingProduct = cart.find(item => item.id === product.id);
-        if (existingProduct) {
-            existingProduct.quantity += 1;
-        } else {
-            product.quantity = 1;
-            cart.push(product);
-        }
-        updateCartDisplay();
+// Function to add item to the cart
+function addToCart(product) {
+    if (!product) {
+        console.error('Product not found:', product);
+        return;
     }
 
-    // Function to update the cart display
-    function updateCartDisplay() {
-        console.log('Updating cart display with items:', cart); // Log the current cart contents
+    // Check if the product already exists in the cart
+    const existingProduct = cart.find(item => item.id === product.id);
+    if (existingProduct) {
+        existingProduct.quantity += 1;
+    } else {
+        product.quantity = 1;
+        cart.push(product);
+    }
+    updateCartDisplay();
+}
 
-        // Clear the existing cart display
-        const cartContainer = $('.card .p-5');
-        cartContainer.find('.cart-item').remove();
+// Function to update the cart display
+function updateCartDisplay() {
+    console.log('Updating cart display with items:', cart); // Log the current cart contents
 
-        // Loop through each item in the cart and display it
-        let totalPrice = 0;
-        cart.forEach(item => {
-            const itemTotal = (item.price * item.quantity).toFixed(2);
-            totalPrice += parseFloat(itemTotal);
+    // Clear the existing cart display
+    const cartContainer = $('.card .p-5');
+    cartContainer.find('.cart-item').remove();
 
-            cartContainer.append(`
+    // Loop through each item in the cart and display it
+    let totalPrice = 0;
+    cart.forEach(item => {
+        const itemTotal = (item.price * item.quantity).toFixed(2);
+        totalPrice += parseFloat(itemTotal);
+
+        cartContainer.append(`
                 <!-- Add cart items and update the total price -->
             `);
-        });
+    });
 
-        // Update the total price and item count
-        $('#cart-total').text(`€ ${totalPrice.toFixed(2)}`);
-        $('#item-count').text(cart.length);
+    // Update the total price and item count
+    $('#cart-total').text(`€ ${totalPrice.toFixed(2)}`);
+    $('#item-count').text(cart.length);
+}
+
+// Function to update the quantity of a specific item
+window.updateQuantity = function (productId, action) {
+    const product = cart.find(item => item.id === productId);
+    if (!product) return;
+
+    switch (action) {
+        case 'increase':
+            product.quantity += 1;
+            break;
+        case 'decrease':
+            if (product.quantity > 1) product.quantity -= 1;
+            break;
+        case 'input':
+            // const newQuantity = parseInt($(`#quantity-${productId}`).val());
+            if (newQuantity >= 1) {
+                product.quantity = newQuantity;
+            } else {
+                product.quantity = 1;
+                $(`#quantity-${productId}`).val(1);
+            }
+            break;
     }
+    updateCartDisplay();
+}
 
-    // Function to update the quantity of a specific item
-    window.updateQuantity = function (productId, action) {
-        const product = cart.find(item => item.id === productId);
-        if (!product) return;
-
-        switch (action) {
-            case 'increase':
-                product.quantity += 1;
-                break;
-            case 'decrease':
-                if (product.quantity > 1) product.quantity -= 1;
-                break;
-            case 'input':
-                // const newQuantity = parseInt($(`#quantity-${productId}`).val());
-                if (newQuantity >= 1) {
-                    product.quantity = newQuantity;
-                } else {
-                    product.quantity = 1;
-                    $(`#quantity-${productId}`).val(1);
-                }
-                break;
-        }
-        updateCartDisplay();
-    }
-
-    // Function to remove an item from the cart
-    window.removeItem = function (productId) {
-        cart = cart.filter(item => item.id !== productId);
-        updateCartDisplay();
-    }
-});
+// Function to remove an item from the cart
+window.removeItem = function (productId) {
+    cart = cart.filter(item => item.id !== productId);
+    updateCartDisplay();
+}
