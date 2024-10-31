@@ -1,17 +1,59 @@
-$(document).ready(function() {
+$(document).ready(function () {
     console.log('Document ready and jQuery loaded successfully.'); // Confirm that jQuery is working
-
     // Fetch and display products from JSON
-    try {
-        $.getJSON('../products.json', function(products) {
-            console.log('Products loaded:', products); // Log the products
-            // Code to Loop through each product and display it
+    try{
+        $.getJSON('products.json', function (products) {
+            console.log('Fetched products from JSON:', products); // Log the fetched products
 
+            // Loop through each product and display it
+            const productsContainer = $('#showProducts');
+            products.forEach(product => {
+                productsContainer.append(`<hr class="my-4">
 
+                                    <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                        <div class="col-md-2 col-lg-2 col-xl-2">
+                                            <img
+                                                    src="${product.image}"
+                                                    class="img-fluid rounded-3" alt="${product.description}">
+                                        </div>
+                                        <div class="col-md-3 col-lg-3 col-xl-3">
+                                            <h6 class="text-muted">${product.name}</h6>
+                                            <h6 class="mb-0">${product.author}</h6>
+                                        </div>
+                                        <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2"
+                                                    onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+
+                                            <input id="quantity-1" min="0" name="quantity" value="1" type="number"
+                                                   class="form-control form-control-sm" />
+
+                                            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2"
+                                                    onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                            <h6 class="mb-0">€ 44.00</h6>
+                                        </div>
+                                        <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                            <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                                        </div>
+                                    </div>`);
+            });
+
+            // Add event listeners to the add to cart buttons
+            $('.add-to-cart').click(function () {
+                const productId = $(this).data('product-id');
+                const product = products.find(item => item.id === productId);
+                addToCart(product);
+
+            });
         });
     } catch (error) {
-        console.error('Error loading products:', error); // Log any errors}
-}
+        console.error('Error fetching products:', error);
+    }
 
     // Initialize an empty cart
     let cart = [];
@@ -59,11 +101,11 @@ $(document).ready(function() {
     }
 
     // Function to update the quantity of a specific item
-    window.updateQuantity = function(productId, action) {
+    window.updateQuantity = function (productId, action) {
         const product = cart.find(item => item.id === productId);
         if (!product) return;
 
-        switch(action) {
+        switch (action) {
             case 'increase':
                 product.quantity += 1;
                 break;
@@ -84,7 +126,7 @@ $(document).ready(function() {
     }
 
     // Function to remove an item from the cart
-    window.removeItem = function(productId) {
+    window.removeItem = function (productId) {
         cart = cart.filter(item => item.id !== productId);
         updateCartDisplay();
     }
