@@ -58,14 +58,17 @@ Members:
                                 <div class="p-5">
                                     <div class="d-flex justify-content-between align-items-center mb-5">
                                         <h1 class="fw-bold mb-0">Shopping Cart</h1>
-                                        <h6 class="mb-0 text-muted">3 items</h6>
+                                        <h6 class="mb-0 text-muted"></h6>
                                     </div>
                                     <section id="showProducts">
                                     <!-- Products displayed here with JS -->
+                                        <div id="loadingSpinner" class="spinner-border text-primary" role="status" style="display: none;">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
                                     </section>
 
                                     <div class="pt-5">
-                                        <h6 class="mb-0"><a href="#!" class="text-body"><i
+                                        <h6 class="mb-0"><a href="index.html" class="text-body"><i
                                                 class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
                                     </div>
                                 </div>
@@ -76,19 +79,17 @@ Members:
                                     <hr class="my-4">
 
                                     <div class="d-flex justify-content-between mb-4">
-                                        <h5 class="text-uppercase">items 3</h5>
-                                        <h5>€ 132.00</h5>
+                                        <h5 class="text-uppercase">total items</h5>
+                                        <h5 id="item-count"></h5>
                                     </div>
 
                                     <hr class="my-4">
 
                                     <div class="d-flex justify-content-between mb-5">
                                         <h5 class="text-uppercase">Total price</h5>
-                                        <h5>€ 137.00</h5>
+                                        <h5 id="cart-total"></h5>
                                     </div>
-
-                                    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block btn-lg"
-                                             data-mdb-ripple-color="dark">Checkout</button>
+                                    <button type="button" class="btn btn-dark btn-block btn-lg" data-bs-toggle="modal" data-bs-target="#checkoutModal" onclick="showCheckoutModal()">Checkout</button>
                                 </div>
                             </div>
                         </div>
@@ -98,6 +99,24 @@ Members:
         </div>
     </div>
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="checkoutModalLabel">Checkout</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="background-color: #f8f9fa;">
+                <pre id="jsonDisplay" style="white-space: pre-wrap; word-wrap: break-word;"></pre>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Footer-->
 <footer class="py-5 bg-dark">
