@@ -28,9 +28,10 @@ function displayProducts(products) {
 
 function createProductHTML(product) {
     console.log('Creating HTML for product:', product);
+    const formattedPrice = product.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     return `
         <hr class="my-4">
-        <div class="row mb-4 d-flex justify-content-between align-items-center">
+        <div class="row mb-4 d-flex justify-content-between align-items-center product-row" data-product-id="${product.id}">
             <div class="col-md-2 col-lg-2 col-xl-2">
                 <img src="${product.image}" class="img-fluid rounded-3 product-toggle" alt="${product.description}" data-product-id="${product.id}">
             </div>
@@ -39,15 +40,20 @@ function createProductHTML(product) {
                 <h6 class="mb-0">${product.author}</h6>
             </div>
             <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                <select name="quantity" class="form-control form-control-sm" onchange="updateTotals()">
-                    ${[...Array(10).keys()].map(i => `<option value="${i + 1}">${i + 1}</option>`).join('')}
-                </select>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-${product.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                        1
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-${product.id}">
+                        ${[...Array(10).keys()].map(i => `<li><a class="dropdown-item" href="#">${i + 1}</a></li>`).join('')}
+                    </ul>
+                </div>
             </div>
             <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                <h6 class="mb-0 item-total" id="item-total-${product.id}" data-price="${product.price}">$ ${product.price}</h6>
+                <h6 class="mb-0 item-total" id="item-total-${product.id}" data-price="${product.price}">${formattedPrice}</h6>
             </div>
             <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                <button class="btn btn-danger delete-product">&times;</button>
             </div>
         </div>
         <div class="row mb-4 product-description" id="description-${product.id}" style="display: none;">
@@ -59,46 +65,32 @@ function createProductHTML(product) {
 
 $(document).on('click', '.product-toggle', function () {
     const productId = $(this).data('product-id');
+    console.log(`Toggling description for product ID: ${productId}`);
     $(`#description-${productId}`).slideToggle();
 });
 
-function updateQuantity(element, action) {
-    const select = $(element).siblings('select[name="quantity"]');
-    let quantity = parseInt(select.val());
-
-    if (action === 'decrease' && quantity > 1) {
-        quantity--;
-    } else if (action === 'increase') {
-        quantity++;
-    }
-
-    // Ensure quantity does not go below 1
-    if (quantity < 1) {
-        quantity = 1;
-    }
-
-    console.log(`Updating quantity for action: ${action}, new quantity: ${quantity}`);
-    select.val(quantity);
+$(document).on('click', '.dropdown-item', function (event) {
+    event.preventDefault(); // Prevent the default action
+    const selectedValue = $(this).text();
+    const dropdown = $(this).closest('.dropdown');
+    console.log(`Selected quantity: ${selectedValue}`);
+    dropdown.find('.dropdown-toggle').text(selectedValue);
     updateTotals();
-}
+});
 
-function validateQuantity(select) {
-    if (select.value < 1) {
-        console.log('Quantity cannot be less than 1');
-        $(select).addClass('shake');
-        setTimeout(() => {
-            $(select).removeClass('shake');
-        }, 500);
-        select.value = 1;
-    }
-    console.log(`Validated quantity: ${select.value}`);
-}
+$(document).on('click', '.delete-product', function () {
+    const productRow = $(this).closest('.product-row');
+    const productId = productRow.data('product-id');
+    console.log(`Deleting product with ID: ${productId}`);
+    productRow.remove();
+    updateTotals();
+});
 
 function updateTotals() {
     console.log('Updating totals...');
     const cart = [];
     $('#showProducts .row').each(function () {
-        const quantity = parseInt($(this).find('select[name="quantity"]').val());
+        const quantity = parseInt($(this).find('.dropdown-toggle').text());
         const price = parseFloat($(this).find('.item-total').attr('data-price'));
         const idAttr = $(this).find('.item-total').attr('id');
 
@@ -115,19 +107,20 @@ function updateTotals() {
         cartTotal += itemTotal;
         totalItems += item.quantity;
 
-        $(`#item-total-${item.id}`).text(`$${itemTotal.toFixed(2)}`);
+        console.log(`Updating item total for product ID: ${item.id}, Quantity: ${item.quantity}, Item Total: ${itemTotal}`);
+        $(`#item-total-${item.id}`).text(itemTotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' }));
     });
 
-    console.log(`Total items: ${totalItems}, Cart total: $${cartTotal.toFixed(2)}`);
+    console.log(`Total items: ${totalItems}, Cart total: ${cartTotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}`);
     $('#item-count').text(totalItems);
-    $('#cart-total').text(`$${cartTotal.toFixed(2)}`);
+    $('#cart-total').text(cartTotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' }));
 }
 
 function showCheckoutModal() {
     console.log('Showing checkout modal...');
     const cart = [];
     $('#showProducts .row').each(function () {
-        const quantity = parseInt($(this).find('select[name="quantity"]').val());
+        const quantity = parseInt($(this).find('.dropdown-toggle').text());
         const price = parseFloat($(this).find('.item-total').attr('data-price'));
         const idAttr = $(this).find('.item-total').attr('id');
 
@@ -137,7 +130,7 @@ function showCheckoutModal() {
             const author = $(this).find('.mb-0').text();
             const image = $(this).find('img').attr('src');
             const description = $(this).find('img').attr('alt');
-            const totalPrice = (quantity * price).toFixed(2);
+            const totalPrice = (quantity * price).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
             cart.push({ id, name, author, image, description, quantity, price: totalPrice });
         }
