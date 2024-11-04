@@ -118,25 +118,25 @@ function updateTotals() {
 
 function showCheckoutModal() {
     console.log('Showing checkout modal...');
-    const cart = [];
-    $('#showProducts .row').each(function () {
-        const quantity = parseInt($(this).find('.dropdown-toggle').text());
-        const price = parseFloat($(this).find('.item-total').attr('data-price'));
-        const idAttr = $(this).find('.item-total').attr('id');
+    let cart = [];
+    $('#showProducts .product-row').each(function () {
+        let quantity = parseInt($(this).find('.dropdown-toggle').text());
+        let price = parseFloat($(this).find('.item-total').attr('data-price'));
+        let idAttr = $(this).find('.item-total').attr('id');
 
         if (idAttr) {
-            const id = idAttr.split('-')[2];
-            const name = $(this).find('.text-muted').text();
-            const author = $(this).find('.mb-0').text();
-            const image = $(this).find('img').attr('src');
-            const description = $(this).find('img').attr('alt');
-            const totalPrice = (quantity * price).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            let id = idAttr.split('-')[2];
+            let name = $(this).find('h6.text-muted').text();
+            let author = $(this).find('h6').eq(1).text();
+            let image = $(this).find('img').attr('src');
+            let description = $(this).find('img').attr('alt');
+            let totalPrice = (quantity * price).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
-            cart.push({ id, name, author, image, description, quantity, price: totalPrice });
+            cart.push({ id, name, author, image, description, quantity, price, totalPrice });
         }
     });
 
     console.log('Cart data:', cart);
-    const jsonDisplay = document.getElementById('jsonDisplay');
+    let jsonDisplay = document.getElementById('jsonDisplay');
     jsonDisplay.textContent = JSON.stringify(cart, null, 2);
 }
