@@ -136,6 +136,20 @@ function showCheckoutModal() {
         }
     });
 
+    $.ajax({
+        url: "https://jsonplaceholder.typicode.com/posts",
+        type: "POST",
+        data: JSON.stringify(cart),
+        success: function (response) {
+            console.log(response);
+            console.log("AJAX was successful");
+            console.log(JSON.stringify(cart));
+        },
+        error: function () {
+            console.log("AJAX failed");
+        }
+    });
+
     console.log('Cart data:', cart);
     let jsonDisplay = document.getElementById('jsonDisplay');
     jsonDisplay.textContent = JSON.stringify(cart, null, 2);
