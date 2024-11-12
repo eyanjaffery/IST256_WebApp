@@ -8,7 +8,7 @@ $(document).ready(function () {
 function displayProductsHome(){
     // Fetch and display products from JSON
     try{
-        $.getJSON('products.json', function (products) {
+        $.getJSON('assets/products.json', function (products) {
             console.log('Fetched products from JSON:', products); // Log the fetched products
 
             // Loop through each product and display it
