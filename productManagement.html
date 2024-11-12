@@ -72,9 +72,10 @@
                                                 <p>{{ item.author }}</p>
                                             </div>
                                             <div class="col-md-3 d-flex">
-                                                <select class="form-select" ng-model="item.quantity" ng-change="productCtrl.updateItemTotal(item)">
-                                                    <option ng-repeat="qty in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" value="{{ qty }}">{{ qty }}</option>
-                                                </select>
+                                                <div class="col-md-3 d-flex">
+                                                    <!-- Quantity Display -->
+                                                    <input type="number" class="form-control" ng-model="item.quantity" ng-change="productCtrl.updateItemTotal(item)" min="1" max="10" style="width: 60px; text-align: center;" />
+                                                </div>
                                             </div>
                                             <div class="col-md-2 text-end">
                                                 <h6 class="mb-0">${{ item.totalPrice | number:2 }}</h6>
