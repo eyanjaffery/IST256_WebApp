@@ -2,19 +2,31 @@ angular.module('shippingApp', [])
     .controller('ProductController', function($http, $scope, $timeout) {
         const vm = this;
 
-        // Initialize cart and shipping details
+        // Initialize cart, shipping, and billing details
         vm.cart = [];
-        vm.allProducts = []; // Stores all available products fetched from JSON
+        vm.allProducts = [];
         vm.loading = true;
         vm.totalItems = 0;
         vm.totalPrice = 0;
 
-        // Shipping form visibility and JSON display
+        // Flags for visibility and JSON display
         vm.isShippingFormVisible = false;
+        vm.isBillingFormVisible = false;
         vm.showCartJSON = false;
         vm.showJSON = false;
+        vm.showBillingJSON = false;
 
-        // Shipping details object for the form
+        // Error messages for form validation
+        vm.shippingErrorMessage = '';
+        vm.billingErrorMessage = '';
+
+        // Validation flags (initialized as true to prevent showing errors initially)
+        vm.emailValid = true;
+        vm.cardNumberValid = true;
+        vm.expiryDateValid = true;
+        vm.cvvValid = true;
+
+        // Shipping and billing details objects
         vm.shippingDetails = {
             address: '',
             city: '',
@@ -25,103 +37,55 @@ angular.module('shippingApp', [])
             method: ''
         };
 
+        vm.billingDetails = {
+            name: '',
+            email: '',
+            cardNumber: '',
+            expiryDate: '',
+            cvv: ''
+        };
+
+        // Generate a unique order number based on current timestamp
+        vm.generateOrderNumber = function() {
+            const date = new Date();
+            return `ORDER-${date.getTime()}`;
+        }
+
         // Fetch products from JSON file
         vm.fetchProducts = function() {
             console.log('Fetching products...');
             $http.get('assets/products.json').then(function(response) {
-                vm.allProducts = response.data; // Store all products for selection
-                console.log('Available products:', vm.allProducts);
-                vm.cart = []; // Ensure cart starts empty
-                vm.updateTotals(); // Initialize totals
+                vm.allProducts = response.data;
+                vm.cart = [];
+                vm.updateTotals();
                 vm.loading = false;
+                console.log('Products loaded successfully:', vm.allProducts);
             }).catch(function(error) {
                 console.error('Error fetching products:', error);
                 vm.loading = false;
             });
         };
 
-        // Add selected product to cart
-        vm.addToCart = function(productId) {
-            const selectedProduct = vm.allProducts.find(product => product.id === productId);
-            if (selectedProduct) {
-                const existingItem = vm.cart.find(item => item.id === productId);
-
-                if (existingItem) {
-                    existingItem.quantity += 1; // Increment quantity if already in cart
-                    vm.updateItemTotal(existingItem);
-                    console.log(`Increased quantity for ${existingItem.name} to ${existingItem.quantity}`);
-                } else {
-                    const newItem = {
-                        ...selectedProduct,
-                        quantity: 1, // Start with quantity of 1
-                        totalPrice: selectedProduct.price // Initial total price per item
-                    };
-                    vm.cart.push(newItem);
-                    console.log(`Added new product to cart: ${newItem.name}`);
-                }
-                vm.updateTotals(); // Recalculate totals after adding item
-            }
-        };
-
-        // Update total price for each item in cart
+        // Update item total and recalculate cart totals
         vm.updateItemTotal = function(item) {
             item.totalPrice = item.price * item.quantity;
-            vm.updateTotals(); // Recalculate cart totals
+            vm.updateTotals(); // Recalculate totals after each quantity change
         };
 
-        // Remove an item from the cart
-        vm.removeItem = function(item) {
-            console.log(`Removing item from cart: ${item.name}`);
-            const index = vm.cart.indexOf(item);
-            if (index > -1) {
-                vm.cart.splice(index, 1);
-                console.log(`Item ${item.name} removed successfully.`);
-                vm.updateTotals(); // Update totals after item removal
-            }
-        };
-
-        // Calculate total items and total price for the cart
         vm.updateTotals = function() {
-            // Ensure totalItems sums the quantities as numbers
+            // Sum quantities for total items and calculate total price
             vm.totalItems = vm.cart.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-
-            // Calculate totalPrice by summing each item's totalPrice
-            vm.totalPrice = vm.cart.reduce((sum, item) => sum + Number(item.totalPrice || 0), 0).toFixed(2);
-
-            console.log(`Updated cart totals: Total Items = ${vm.totalItems}, Total Price = $${vm.totalPrice}`);
+            vm.totalPrice = vm.cart.reduce((sum, item) => sum + (item.price * item.quantity || 0), 0).toFixed(2);
+            console.log('Updated totals - Total Items:', vm.totalItems, 'Total Price:', vm.totalPrice);
         };
 
-        // Validate ZIP code format (5 digits or 5+4 digits with hyphen)
-        vm.isValidZip = function(zip) {
-            const zipPattern = /^\d{5}(-\d{4})?$/;
-            return zipPattern.test(zip);
-        };
-
-        // Form validation for shipping details
-        vm.validateShippingDetails = function() {
-            console.log('Validating shipping details...');
-            if (!vm.shippingDetails.address || !vm.shippingDetails.city || !vm.shippingDetails.state ||
-                !vm.shippingDetails.zip || !vm.shippingDetails.country || !vm.shippingDetails.carrier ||
-                !vm.shippingDetails.method) {
-                alert("Please fill in all required fields.");
-                return false;
-            }
-
-            if (!vm.isValidZip(vm.shippingDetails.zip)) {
-                alert("Invalid ZIP code format.");
-                return false;
-            }
-
-            return true;
-        };
-
-        // Display checkout JSON directly on the page
+        // Show checkout JSON and open shipping form
         vm.showCheckoutJSON = function() {
+            console.log('Showing checkout JSON...');
             const checkoutData = vm.cart.map(item => ({
                 id: item.id,
                 name: item.name,
                 author: item.author,
-                image: item.image,
                 description: item.description,
                 quantity: item.quantity,
                 price: item.price,
@@ -129,16 +93,7 @@ angular.module('shippingApp', [])
             }));
             vm.checkoutJSON = JSON.stringify(checkoutData, null, 2);
             vm.showCartJSON = true;
-            console.log('Checkout JSON Data:', checkoutData);
-            vm.showShippingForm(); // Scroll to the shipping form
-        };
-
-        // Function to show the shipping form and scroll to it
-        vm.showShippingForm = function() {
-            console.log('Showing shipping form...');
             vm.isShippingFormVisible = true;
-
-            // Use $timeout to ensure Angular has rendered the element before scrolling
             $timeout(function() {
                 const shippingSection = document.getElementById('shipping-section');
                 if (shippingSection) {
@@ -147,16 +102,164 @@ angular.module('shippingApp', [])
             }, 0);
         };
 
-        // Submit the shipping form and display JSON output
-        vm.submitShipping = function() {
-            console.log('Submitting shipping details...');
-            if (vm.validateShippingDetails()) {
-                vm.showJSON = true;
-                console.log('Shipping details submitted successfully:', vm.shippingDetails);
+        // Validate shipping details
+        vm.validateShippingDetails = function() {
+            console.log('Validating shipping details...');
+            const { address, city, state, zip, country, carrier, method } = vm.shippingDetails;
+            if (!address || !city || !state || !zip || !country || !carrier || !method) {
+                vm.shippingErrorMessage = "Please fill in all required shipping fields.";
+                console.warn(vm.shippingErrorMessage);
+                return false;
+            }
+            const zipPattern = /^\d{5}(-\d{4})?$/;
+            if (!zipPattern.test(zip)) {
+                vm.shippingErrorMessage = "Invalid ZIP code format.";
+                console.warn(vm.shippingErrorMessage);
+                return false;
+            }
+            vm.shippingErrorMessage = ''; // Clear error message if valid
+            console.log('Shipping details validated successfully');
+            return true;
+        };
+
+        // Triggered by ng-blur on billing fields
+        vm.validateEmail = function() {
+            console.log('Validating email...');
+            if (vm.billingDetails.email) {
+                const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                vm.emailValid = emailPattern.test(vm.billingDetails.email);
+                console.log('Email validation:', vm.emailValid);
+            } else {
+                vm.emailValid = true; // Reset validation if field is empty
             }
         };
 
-        // Fetch products on initialization
-        console.log('Initializing product controller...');
+        vm.validateCardNumber = function() {
+            console.log('Validating card number...');
+            if (vm.billingDetails.cardNumber) {
+                const cardPattern = /^\d{16}$/;
+                vm.cardNumberValid = cardPattern.test(vm.billingDetails.cardNumber);
+                console.log('Card number validation:', vm.cardNumberValid);
+            } else {
+                vm.cardNumberValid = true; // Reset validation if field is empty
+            }
+        };
+
+        vm.validateExpiryDate = function() {
+            console.log('Validating expiry date...');
+            if (vm.billingDetails.expiryDate) {
+                const expiryPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
+                vm.expiryDateValid = expiryPattern.test(vm.billingDetails.expiryDate);
+                console.log('Expiry date validation:', vm.expiryDateValid);
+            } else {
+                vm.expiryDateValid = true; // Reset validation if field is empty
+            }
+        };
+
+        vm.validateCvv = function() {
+            console.log('Validating CVV...');
+            if (vm.billingDetails.cvv) {
+                const cvvPattern = /^\d{3}$/;
+                vm.cvvValid = cvvPattern.test(vm.billingDetails.cvv);
+                console.log('CVV validation:', vm.cvvValid);
+            } else {
+                vm.cvvValid = true; // Reset validation if field is empty
+            }
+        };
+
+        // Submit shipping form and show billing section
+        vm.submitShipping = function() {
+            if (vm.validateShippingDetails()) {
+                vm.isBillingFormVisible = true;
+                vm.showShippingJSON = true;
+                $timeout(function() {
+                    const billingSection = document.getElementById('billing-section');
+                    if (billingSection) {
+                        billingSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 0);
+            }
+        };
+
+        // Validate billing form on final submit
+        vm.submitBilling = function() {
+            if (vm.emailValid && vm.cardNumberValid && vm.expiryDateValid && vm.cvvValid) {
+                console.log('All billing details validated successfully');
+                vm.showBillingJSON = true;
+                vm.finalizeOrder();
+            } else {
+                vm.billingErrorMessage = "Please correct errors in the billing details.";
+                console.warn(vm.billingErrorMessage);
+            }
+        };
+
+        // Finalize the order: Collect all data, create order number, and send JSON to server
+        vm.finalizeOrder = function() {
+            const orderNumber = vm.generateOrderNumber();
+
+            // Prepare JSON data for the entire order
+            const orderData = {
+                orderNumber: orderNumber,
+                cart: vm.cart.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    author: item.author,
+                    description: item.description,
+                    quantity: item.quantity,
+                    price: item.price,
+                    totalPrice: item.totalPrice
+                })),
+                shippingDetails: vm.shippingDetails,
+                billingDetails: vm.billingDetails,
+                totalItems: vm.totalItems,
+                totalPrice: vm.totalPrice
+            };
+
+            console.log('Submitting order data to server:', orderData);
+            $http.post('http://130.203.136.203:3001/api/order', orderData)
+                .then(function(response) {
+                    console.log('Order submitted successfully:', response.data);
+                    alert(`Order ${orderNumber} has been successfully submitted!`);
+                    vm.resetForms();
+                })
+                .catch(function(error) {
+                    console.error('Error submitting order:', error);
+                    alert('There was an error processing your order. Please try again.');
+                });
+        };
+
+        // Reset form fields
+        vm.resetForms = function() {
+            console.log('Resetting forms and clearing data...');
+            vm.cart = [];
+            vm.shippingDetails = {
+                address: '',
+                city: '',
+                state: '',
+                zip: '',
+                country: '',
+                carrier: '',
+                method: ''
+            };
+            vm.billingDetails = {
+                name: '',
+                email: '',
+                cardNumber: '',
+                expiryDate: '',
+                cvv: ''
+            };
+            vm.totalItems = 0;
+            vm.totalPrice = 0;
+            vm.isShippingFormVisible = false;
+            vm.isBillingFormVisible = false;
+            vm.showCartJSON = false;
+            vm.showShippingJSON = false;
+            vm.showBillingJSON = false;
+            vm.shippingErrorMessage = '';
+            vm.billingErrorMessage = '';
+            console.log('Form reset complete');
+        };
+
+        // Initialize by fetching products
         vm.fetchProducts();
     });

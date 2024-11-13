@@ -12,7 +12,7 @@
 //         // Shipping form visibility and JSON display
 //         vm.isShippingFormVisible = false;
 //         vm.showCartJSON = false;
-//         vm.showJSON = false;
+//         vm.showShippingJSON = false;
 //
 //         // Shipping details object for the form
 //         vm.shippingDetails = {
@@ -180,7 +180,7 @@
 //             if (vm.shippingDetails.address && vm.shippingDetails.city && vm.shippingDetails.state &&
 //                 vm.isValidZip(vm.shippingDetails.zip) && vm.shippingDetails.country &&
 //                 vm.shippingDetails.carrier && vm.shippingDetails.method) {
-//                 vm.showJSON = true;
+//                 vm.showShippingJSON = true;
 //                 console.log('Shipping details submitted successfully:', vm.shippingDetails);
 //             } else {
 //                 alert("Please fill in all required fields with valid information.");

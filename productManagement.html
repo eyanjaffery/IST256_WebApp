@@ -74,7 +74,12 @@
                                             <div class="col-md-3 d-flex">
                                                 <div class="col-md-3 d-flex">
                                                     <!-- Quantity Display -->
-                                                    <input type="number" class="form-control" ng-model="item.quantity" ng-change="productCtrl.updateItemTotal(item)" min="1" max="10" style="width: 60px; text-align: center;" />
+                                                    <div class="col-md-3 d-flex">
+                                                        <!-- Quantity Display with ng-change to update totals -->
+                                                        <input type="number" class="form-control" ng-model="item.quantity"
+                                                               ng-change="productCtrl.updateItemTotal(item)" min="1" max="10"
+                                                               style="width: 60px; text-align: center;" />
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-2 text-end">
@@ -103,7 +108,7 @@
                                         <h5 class="text-uppercase">Total Price</h5>
                                         <h5>${{ productCtrl.totalPrice }}</h5>
                                     </div>
-                                    <button type="button" class="btn btn-dark btn-block btn-lg" ng-click="productCtrl.showCheckoutJSON()">Checkout</button>
+                                    <button type="button" class="btn btn-dark btn-block btn-lg" ng-click="productCtrl.showCheckoutJSON()">Continue</button>
 
                                     <!-- Cart JSON Output -->
                                     <div class="mt-4" ng-show="productCtrl.showCartJSON">
@@ -167,16 +172,77 @@
             </div>
         </div>
         <div class="text-center">
-            <button type="submit" class="btn btn-dark">Submit Shipping</button>
+            <button type="submit" class="btn btn-dark">Checkout</button>
         </div>
     </form>
     <!-- JSON Output for Shipping Details -->
-    <div class="mt-4" ng-show="productCtrl.showJSON">
+    <div class="mt-4" ng-show="productCtrl.showShippingJSON">
         <h5 class="fw-bold text-center">Shipping Details JSON:</h5>
         <pre>{{ productCtrl.shippingDetails | json }}</pre>
     </div>
 </section>
 
+<!-- Billing Details Section -->
+<section id="billing-section" class="container my-5" ng-show="productCtrl.isBillingFormVisible">
+    <h3 class="fw-bold text-center mb-4">Billing Details</h3>
+    <form ng-submit="productCtrl.submitBilling()" novalidate>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="billing-name" class="form-label">Name on Card</label>
+                <input type="text" id="billing-name" class="form-control" ng-model="productCtrl.billingDetails.name" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="billing-email" class="form-label">Email</label>
+                <input type="email" id="billing-email" class="form-control" ng-model="productCtrl.billingDetails.email"
+                       ng-change="productCtrl.validateEmail()"
+                       ng-style="{'border-color': productCtrl.emailValid ? '' : 'red'}" required>
+                <small class="text-danger" ng-show="!productCtrl.emailValid">
+                    Please enter a valid email address.
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="card-number" class="form-label">Card Number</label>
+                <input type="text" id="card-number" class="form-control" ng-model="productCtrl.billingDetails.cardNumber"
+                       ng-change="productCtrl.validateCardNumber()"
+                       ng-style="{'border-color': productCtrl.cardNumberValid ? '' : 'red'}" required>
+                <small class="text-danger" ng-show="!productCtrl.cardNumberValid">
+                    Please enter a valid 16-digit card number.
+                </small>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="expiry-date" class="form-label">Expiry Date (MM/YY)</label>
+                <input type="text" id="expiry-date" class="form-control" placeholder="MM/YY"
+                       ng-model="productCtrl.billingDetails.expiryDate"
+                       ng-change="productCtrl.validateExpiryDate()"
+                       ng-style="{'border-color': productCtrl.expiryDateValid ? '' : 'red'}" required>
+                <small class="text-danger" ng-show="!productCtrl.expiryDateValid">
+                    Please enter a valid expiry date in MM/YY format.
+                </small>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="cvv" class="form-label">CVV</label>
+                <input type="password" id="cvv" class="form-control" placeholder="123"
+                       ng-model="productCtrl.billingDetails.cvv"
+                       ng-change="productCtrl.validateCvv()"
+                       ng-style="{'border-color': productCtrl.cvvValid ? '' : 'red'}" required>
+                <small class="text-danger" ng-show="!productCtrl.cvvValid">
+                    Please enter a valid 3-digit CVV.
+                </small>
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-dark">Submit Order</button>
+        </div>
+    </form>
+
+    <!-- JSON Output for Billing Details -->
+    <div class="mt-4" ng-show="productCtrl.showBillingJSON">
+        <h5 class="fw-bold text-center">Billing Details JSON:</h5>
+        <pre>{{ productCtrl.billingDetails | json }}</pre>
+    </div>
+</section>
 <!-- Footer -->
 <footer class="py-5 bg-dark">
     <div class="container">
