@@ -1,0 +1,17 @@
+{
+  "name": "ist256_webapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eyanjaffery/IST256_WebApp.git"
+  },
+  "private": true,
+  "dependencies": {
+    "angular": "^1.8.3"
+  }
+}
